@@ -2,10 +2,13 @@ import 'package:delit_app/animation/fadeRoute.dart';
 import 'package:delit_app/component/logo.dart';
 import 'package:delit_app/component/titlecontent.dart';
 import 'package:delit_app/page/login_page.dart';
+import 'package:delit_app/page/startQuestion.dart';
+import 'package:delit_app/providers/auth_provider.dart';
 // ignore: unused_import
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:delit_app/theme.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -29,14 +32,36 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
+  TextEditingController nameController = TextEditingController(text: '');
+  TextEditingController emailController = TextEditingController(text: '');
+  TextEditingController passwordController = TextEditingController(text: '');
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+
+    handleSignUp() async {
+      if (await authProvider.register(
+        name: nameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+      )) {
+        Navigator.pushReplacement(
+          context,
+          FadeRoute(
+            page: StartQuestion(),
+          ),
+        );
+      }
+    }
 
     // name Form
     Widget formName() {
       return Container(
         child: TextFormField(
+          controller: nameController,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
             border: UnderlineInputBorder(
@@ -63,6 +88,7 @@ class _RegisterPageState extends State<RegisterPage> {
     Widget formEmail() {
       return Container(
         child: TextFormField(
+          controller: emailController,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             border: UnderlineInputBorder(
@@ -87,7 +113,8 @@ class _RegisterPageState extends State<RegisterPage> {
 
     Widget formPassword() {
       return Container(
-        child: TextField(
+        child: TextFormField(
+          controller: passwordController,
           obscureText: !showPassword,
           decoration: InputDecoration(
             border: UnderlineInputBorder(
@@ -129,7 +156,7 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
         // ignore: deprecated_member_use
         child: RaisedButton(
-          onPressed: () {},
+          onPressed: handleSignUp,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

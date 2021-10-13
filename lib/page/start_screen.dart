@@ -16,13 +16,13 @@ class _StartScreenState extends State<StartScreen> {
     super.initState();
     Timer(
       Duration(seconds: 5),
-      // () => Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(
-      //     builder: (context) => LoginPage(),
-      //   ),
-      // ),
-      () => Navigator.pushReplacementNamed(context, '/home'),
+      () => Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        ),
+      ),
+      // () => Navigator.pushReplacementNamed(context, '/home'),
     );
   }
 
