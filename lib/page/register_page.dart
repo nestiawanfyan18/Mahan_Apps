@@ -1,4 +1,5 @@
 import 'package:delit_app/animation/fadeRoute.dart';
+import 'package:delit_app/component/loading_bottom.dart';
 import 'package:delit_app/component/logo.dart';
 import 'package:delit_app/component/titlecontent.dart';
 import 'package:delit_app/page/login_page.dart';
@@ -19,6 +20,7 @@ class RegisterPage extends StatefulWidget {
 
 class _RegisterPageState extends State<RegisterPage> {
   bool showPassword = false;
+
   var valueChoice;
   List<String> listItem = [
     'Dibawah < 18 Tahun',
@@ -36,6 +38,8 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailController = TextEditingController(text: '');
   TextEditingController passwordController = TextEditingController(text: '');
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -43,18 +47,43 @@ class _RegisterPageState extends State<RegisterPage> {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
 
     handleSignUp() async {
+      setState(() {
+        isLoading = true;
+      });
+
       if (await authProvider.register(
         name: nameController.text,
         email: emailController.text,
         password: passwordController.text,
       )) {
-        Navigator.pushReplacement(
-          context,
-          FadeRoute(
-            page: StartQuestion(),
+        Navigator.pushReplacementNamed(context, '/home');
+
+        // Navigator.pushReplacement(
+        //   context,
+        //   FadeRoute(
+        //     page: StartQuestion(),
+        //   ),
+        // );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: dangerColor,
+            content: Text(
+              'Gagal Register',
+              textAlign: TextAlign.center,
+              style: primaryTextStyle.copyWith(
+                color: thridTextColor,
+                fontSize: 14,
+                fontWeight: semibold,
+              ),
+            ),
           ),
         );
       }
+
+      setState(() {
+        isLoading = false;
+      });
     }
 
     // name Form
@@ -264,10 +293,10 @@ class _RegisterPageState extends State<RegisterPage> {
                         formPassword(),
 
                         // selection Old
-                        selectOld(),
+                        // selectOld(),
 
                         // button daftar
-                        btnDaftar(),
+                        isLoading ? LoadingButton() : btnDaftar(),
                       ],
                     ),
                   ),

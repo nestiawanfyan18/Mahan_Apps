@@ -4,19 +4,22 @@ import 'package:delit_app/Models/user_models.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  Uri baseUrl = 'http://localhost:8000/api' as Uri;
+  String baseUrl = 'http://10.0.2.2:8000/api';
 
   Future<UserModels> register({
     required String name,
     required String email,
     required String password,
   }) async {
-    var headers = {'conten-type': 'application/json'};
+    var headers = {'content-type': 'application/json'};
     var body = jsonEncode({
       'name': name,
       'email': email,
       'password': password,
     });
+
+    // print(name);
+    // print(email);
 
     var response = await http.post(Uri.parse('$baseUrl/register'),
         headers: headers, body: body);
