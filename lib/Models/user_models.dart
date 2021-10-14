@@ -1,16 +1,16 @@
 class UserModels {
-  late int id;
-  late String name;
-  late String email;
-  late String password;
-  late String token;
+  late int? id;
+  late String? name;
+  late String? email;
+  late String? password;
+  late String? token;
 
   UserModels({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.password,
-    required this.token,
+    this.id,
+    this.name,
+    this.email,
+    this.password,
+    this.token,
   });
 
   UserModels.fromJson(Map<String, dynamic> json) {
