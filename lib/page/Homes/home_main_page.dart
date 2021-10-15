@@ -1,6 +1,9 @@
+import 'package:delit_app/Models/user_models.dart';
 import 'package:delit_app/component/component.dart';
+import 'package:delit_app/providers/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:delit_app/theme.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -8,6 +11,9 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModels user = authProvider.user;
 
     Widget selamatDatangUser() {
       return Container(
@@ -31,7 +37,7 @@ class HomePage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Haloo, Nestiawan",
+                    "Haloo, ${user.name}",
                     style: primaryTextStyle.copyWith(
                       fontWeight: semibold,
                       fontSize: 23,
@@ -42,7 +48,9 @@ class HomePage extends StatelessWidget {
                       vertical: 5,
                     ),
                     child: Text(
-                      'Mahasiswa di Universitas Lampung',
+                      (user.asal_kampus != null)
+                          ? 'Mahasiswa di Universitas Lampung'
+                          : '-',
                       style: primaryTextStyle.copyWith(
                         fontSize: 11,
                         fontWeight: regular,

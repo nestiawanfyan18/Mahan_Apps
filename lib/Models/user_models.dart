@@ -4,6 +4,10 @@ class UserModels {
   late String? email;
   late String? password;
   late String? token;
+  late String? asal_kampus;
+  late String? gander;
+  late String? kota;
+  late String? provinsi;
 
   UserModels({
     this.id,
@@ -11,6 +15,10 @@ class UserModels {
     this.email,
     this.password,
     this.token,
+    this.asal_kampus,
+    this.gander,
+    this.kota,
+    this.provinsi,
   });
 
   UserModels.fromJson(Map<String, dynamic> json) {
@@ -18,6 +26,10 @@ class UserModels {
     name = json['name'];
     email = json['email'];
     password = json['password'];
+    asal_kampus = json['asal_kampus'];
+    gander = json['gander'];
+    kota = json['kota'];
+    provinsi = json['provinsi'];
   }
 
   Map<String, dynamic> toJson() {
@@ -27,6 +39,10 @@ class UserModels {
       'email': email,
       'password': password,
       'token': token,
+      'asal_kampus': asal_kampus,
+      'gander': gander,
+      'kota': kota,
+      'provinsi': provinsi,
     };
   }
 }

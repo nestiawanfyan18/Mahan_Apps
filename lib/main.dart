@@ -2,8 +2,10 @@
 import 'package:delit_app/page/Homes/Article/main_article_page.dart';
 import 'package:delit_app/page/Homes/Article/view_article_page.dart';
 import 'package:delit_app/page/Homes/main_page.dart';
+import 'package:delit_app/page/login_page.dart';
 import 'package:delit_app/page/start_screen.dart';
 import 'package:delit_app/providers/auth_provider.dart';
+import 'package:delit_app/providers/question_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'konsultasi/main_home_page.dart';
@@ -20,9 +22,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (context) => AuthProvider(),
-        ),
+        ChangeNotifierProvider(create: (context) => AuthProvider()),
+        ChangeNotifierProvider(create: (context) => QuestionsProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
         ),
         routes: {
           '/': (context) => StartScreen(),
+          '/login': (context) => LoginPage(),
           '/home': (context) => MainPage(),
           '/article': (context) => MainArticlePage(),
           '/article-view': (context) => ViewArticlePage(),

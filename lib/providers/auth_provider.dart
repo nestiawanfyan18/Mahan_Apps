@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:delit_app/Models/user_models.dart';
 import 'package:delit_app/services/auth_service.dart';
 import 'package:flutter/cupertino.dart';
@@ -26,6 +28,8 @@ class AuthProvider with ChangeNotifier {
       );
 
       _user = user;
+
+      // print(jsonEncode(user));
       return true;
     } catch (e) {
       print(e);
@@ -44,6 +48,7 @@ class AuthProvider with ChangeNotifier {
       );
 
       _user = user;
+      print(jsonEncode(user));
       return true;
     } catch (e) {
       print(e);

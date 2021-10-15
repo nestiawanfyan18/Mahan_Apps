@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:delit_app/page/login_page.dart';
+import 'package:delit_app/providers/question_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class StartScreen extends StatefulWidget {
   const StartScreen({Key? key}) : super(key: key);
@@ -13,17 +15,14 @@ class StartScreen extends StatefulWidget {
 class _StartScreenState extends State<StartScreen> {
   @override
   void initState() {
+    getInit();
+
     super.initState();
-    Timer(
-      Duration(seconds: 5),
-      () => Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginPage(),
-        ),
-      ),
-      // () => Navigator.pushReplacementNamed(context, '/home'),
-    );
+  }
+
+  getInit() async {
+    await Provider.of<QuestionsProvider>(context, listen: false).getQuestions();
+    Navigator.pushReplacementNamed(context, '/login');
   }
 
   @override
