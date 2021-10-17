@@ -59,6 +59,9 @@ flutter:
     - assets/images/man-1.jpg
     - assets/icons/
     - assets/images/Artikel/
+    - assets/images/cover_comic/
+    - assets/images/PodCast/
+
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

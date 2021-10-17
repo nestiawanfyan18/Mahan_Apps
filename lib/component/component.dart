@@ -67,7 +67,7 @@ class CardArticle extends StatelessWidget {
                     borderRadius: BorderRadius.circular(7),
                   ),
                   image: DecorationImage(
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                     image: AssetImage(
                         (imgProfile != null) ? imgProfile.toString() : ''),
                   ),
@@ -250,5 +250,149 @@ class EducationCategory extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class ListKomik extends StatelessWidget {
+  const ListKomik({
+    Key? key,
+    required this.image,
+    required this.title,
+    this.route,
+  }) : super(key: key);
+
+  final String image;
+  final String title;
+  final String? route;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
+    return Container(
+      width: size.width * 0.27,
+      margin: EdgeInsets.symmetric(
+        horizontal: 5,
+        vertical: 5,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            height: 150,
+            decoration: ShapeDecoration(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(7),
+              ),
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                image: AssetImage(image.toString()),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(
+              vertical: 8,
+              horizontal: 3,
+            ),
+            child: Text(
+              title.toString(),
+              style: primaryTextStyle.copyWith(
+                fontSize: 10,
+                fontWeight: bold,
+              ),
+              overflow: TextOverflow.ellipsis,
+              maxLines: 2,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class CardPodcast extends StatelessWidget {
+  const CardPodcast({
+    Key? key,
+    this.imageCover,
+    required this.title,
+    this.route,
+  }) : super(key: key);
+
+  final String? imageCover;
+  final String title;
+  final String? route;
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 4),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GestureDetector(
+            onTap: () {},
+            child: Container(
+              width: size.width * 0.28,
+              height: 90,
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: AssetImage(
+                    imageCover.toString(),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(
+              vertical: 10,
+            ),
+            child: Text(
+              title.toString(),
+              style: primaryTextStyle.copyWith(
+                fontSize: 10,
+                fontWeight: medium,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class EmergencyButtonAppbar extends StatelessWidget {
+  const EmergencyButtonAppbar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        width: 45,
+        height: 50,
+        margin: EdgeInsets.symmetric(
+          vertical: 15,
+          horizontal: 15,
+        ),
+        padding: EdgeInsets.all(6),
+        child: IconButton(
+          onPressed: () {
+            Navigator.pushNamed(context, '/emergency');
+          },
+          icon: Image.asset(
+            "assets/images/alert_icon.png",
+            width: 30,
+          ),
+        ),
+        decoration: BoxDecoration(
+          color: dangerColor,
+          borderRadius: BorderRadius.circular(100),
+        ));
   }
 }

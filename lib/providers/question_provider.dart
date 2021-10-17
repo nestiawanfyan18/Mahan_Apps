@@ -14,10 +14,10 @@ class QuestionsProvider with ChangeNotifier {
 
   Future<void> getQuestions() async {
     try {
-      List<QuestionsModels> questions =
+      List<QuestionsModels>? questions =
           await QuestionService().getQuestionPWB();
 
-      _question = questions;
+      _question = questions!;
     } catch (e) {
       print(e);
     }

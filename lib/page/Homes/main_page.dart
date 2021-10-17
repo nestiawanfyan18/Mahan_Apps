@@ -1,4 +1,4 @@
-import 'package:delit_app/page/Homes/history_page.dart';
+import 'package:delit_app/page/Homes/education_page.dart';
 import 'package:delit_app/page/Homes/home_main_page.dart';
 import 'package:delit_app/page/Homes/list_konsul_page.dart';
 import 'package:delit_app/page/Homes/profile_page.dart';
@@ -153,7 +153,7 @@ class _MainPageState extends State<MainPage> {
         case 2:
           currentIndex = 2;
           widget.indexPages = null;
-          return HistoryPage();
+          return EducationPage();
           break;
 
         case 3:

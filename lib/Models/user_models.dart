@@ -8,6 +8,7 @@ class UserModels {
   late String? gander;
   late String? kota;
   late String? provinsi;
+  late String? test_psikologi;
 
   UserModels({
     this.id,
@@ -19,6 +20,7 @@ class UserModels {
     this.gander,
     this.kota,
     this.provinsi,
+    this.test_psikologi,
   });
 
   UserModels.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,7 @@ class UserModels {
     gander = json['gander'];
     kota = json['kota'];
     provinsi = json['provinsi'];
+    test_psikologi = json['test_psikologi'];
   }
 
   Map<String, dynamic> toJson() {
@@ -43,6 +46,7 @@ class UserModels {
       'gander': gander,
       'kota': kota,
       'provinsi': provinsi,
+      'test_psikologi': test_psikologi,
     };
   }
 }

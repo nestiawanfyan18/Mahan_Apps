@@ -1,9 +1,20 @@
+import 'dart:convert';
+
+import 'package:delit_app/Models/answer_question.dart';
+import 'package:delit_app/Models/questions_models.dart';
+import 'package:delit_app/Models/user_models.dart';
 import 'package:delit_app/component/logo.dart';
 import 'package:delit_app/page/login_page.dart';
 import 'package:delit_app/page/problemDiri.dart';
 import 'package:delit_app/page/pwb/resultPWB.dart';
 import 'package:delit_app/page/pwb/startScreenPWB.dart';
+import 'package:delit_app/providers/answer_provider.dart';
+import 'package:delit_app/providers/auth_provider.dart';
+import 'package:delit_app/providers/get_answer_question_Provider.dart';
+import 'package:delit_app/providers/question_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:delit_app/theme.dart';
 
 class QuestionPWB extends StatefulWidget {
   const QuestionPWB({Key? key}) : super(key: key);
@@ -16,14 +27,114 @@ class _QuestionPWBState extends State<QuestionPWB> {
   List startValue = [];
   double minValue = -10.0;
   double maxValue = 10.0;
+  bool isLoading = false;
+  double resultPoint = 0;
+  int i = 0;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
+    QuestionsProvider questionsProvider =
+        Provider.of<QuestionsProvider>(context);
+    List<QuestionsModels> question = questionsProvider.questionPWB;
+
+    GetAnswerQuestionsProvider getAnswerProvider =
+        Provider.of<GetAnswerQuestionsProvider>(context);
+
+    AnswerQuestionProvider answerQuestionProvider =
+        Provider.of<AnswerQuestionProvider>(context);
+
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModels user = authProvider.user;
+
+    print("panjang data : ${questionsProvider.questionPWB.length}");
+
     if (startValue.isEmpty) {
-      for (var i = 0; i < 20; i++) {
+      for (var i = 0; i < questionsProvider.questionPWB.length; i++) {
         startValue.add(0);
+        // resultPoint += startValue[i];
+        // print("Data Result : ${startValue[i]}");
+      }
+    }
+
+    handleAnswer() async {
+      setState(() {
+        isLoading = true;
+      });
+
+      print(
+          "Data Answer : ${startValue}, Hasil : ${resultPoint} , User_id : ${user.id}, Type Question : ${question[0].jenisPertanyaan!.id}");
+
+      if (await answerQuestionProvider.answer(
+        answer: startValue,
+        point_answer: resultPoint,
+        user_id: user.id!.toInt(),
+        jenisPertanyaan: question[0].jenisPertanyaan!.id!.toInt(),
+      )) {
+        if (await authProvider.updateData(
+          email: user.email.toString(),
+        )) {
+          if (await getAnswerProvider.updateDataGetAnswer(
+            user_id: user.id.toString(),
+          )) {
+            Navigator.pushReplacementNamed(context, '/home');
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: dangerColor,
+                content: Text(
+                  'Tidak Dapat Hasil Test. Error Get Answer PWB!',
+                  textAlign: TextAlign.center,
+                  style: primaryTextStyle.copyWith(
+                    color: thridTextColor,
+                    fontSize: 14,
+                    fontWeight: semibold,
+                  ),
+                ),
+              ),
+            );
+          }
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: dangerColor,
+              content: Text(
+                'Tidak Dapat Hasil Test. Error Get User!',
+                textAlign: TextAlign.center,
+                style: primaryTextStyle.copyWith(
+                  color: thridTextColor,
+                  fontSize: 14,
+                  fontWeight: semibold,
+                ),
+              ),
+            ),
+          );
+        }
+
+        // Navigator.pushReplacement(
+        //  context,
+        //  MaterialPageRoute(
+        //    builder: (context) {
+        //      return ResultPWB();
+        //    },
+        //  ),
+        //);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: dangerColor,
+            content: Text(
+              'Gagal Menjawab',
+              textAlign: TextAlign.center,
+              style: primaryTextStyle.copyWith(
+                color: thridTextColor,
+                fontSize: 14,
+                fontWeight: semibold,
+              ),
+            ),
+          ),
+        );
       }
     }
 
@@ -135,7 +246,7 @@ class _QuestionPWBState extends State<QuestionPWB> {
                   top: 3,
                 ),
                 child: ListView.builder(
-                  itemCount: 20,
+                  itemCount: questionsProvider.questionPWB.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Column(
                       children: [
@@ -146,7 +257,7 @@ class _QuestionPWBState extends State<QuestionPWB> {
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${index.toString()}. Apakah anda sedang dalam merasa kecewa ? Value : ${startValue[index].toString()}",
+                                  "${index.toString()}. ${question[index].question} ? Value : ${startValue[index].toString()}",
                                   style: TextStyle(),
                                   textAlign: TextAlign.left,
                                 ),
@@ -188,16 +299,7 @@ class _QuestionPWBState extends State<QuestionPWB> {
                                 left: size.height * 0.055,
                                 right: size.height * 0.055,
                               ),
-                              onPressed: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) {
-                                      return ResultPWB();
-                                    },
-                                  ),
-                                );
-                              },
+                              onPressed: handleAnswer,
                               child: Text(
                                 "Lihat Hasil",
                                 style: TextStyle(

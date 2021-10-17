@@ -6,6 +6,7 @@ import 'package:delit_app/page/login_page.dart';
 import 'package:delit_app/page/register_page.dart';
 import 'package:delit_app/page/startQuestion.dart';
 import 'package:delit_app/providers/auth_provider.dart';
+import 'package:delit_app/providers/get_answer_question_Provider.dart';
 // ignore: unused_import
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -38,6 +39,8 @@ class _LoginPageState extends State<LoginPage> {
     Size size = MediaQuery.of(context).size;
 
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    GetAnswerQuestionsProvider getAnswerProvider =
+        Provider.of<GetAnswerQuestionsProvider>(context);
 
     handleSignUp() async {
       setState(() {

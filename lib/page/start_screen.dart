@@ -16,11 +16,12 @@ class _StartScreenState extends State<StartScreen> {
   @override
   void initState() {
     getInit();
-
     super.initState();
   }
 
   getInit() async {
+    print('get data question');
+
     await Provider.of<QuestionsProvider>(context, listen: false).getQuestions();
     Navigator.pushReplacementNamed(context, '/login');
   }

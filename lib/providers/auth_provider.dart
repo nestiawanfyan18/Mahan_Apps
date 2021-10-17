@@ -55,4 +55,21 @@ class AuthProvider with ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> updateData({
+    required String email,
+  }) async {
+    try {
+      UserModels user = await AuthService().updateDataUser(
+        email: email,
+      );
+
+      _user = user;
+      print(jsonEncode(user));
+      return true;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

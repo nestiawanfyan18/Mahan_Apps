@@ -1,19 +1,81 @@
+import 'package:delit_app/Models/get_answer_questions_models.dart';
 import 'package:delit_app/Models/user_models.dart';
 import 'package:delit_app/component/component.dart';
 import 'package:delit_app/providers/auth_provider.dart';
+import 'package:delit_app/providers/get_answer_question_Provider.dart';
 import 'package:flutter/material.dart';
 import 'package:delit_app/theme.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  String typePsikologi = "";
+  int typePsikologiLevel = 1;
+  bool successGetData = false;
+
+  @override
+  void initState() {
+    // getAnswerPWB();
+    super.initState();
+  }
+
+  // getAnswerPWB() {
+  //   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) => getDataAnswerPWB();
+
+  // }
+
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModels user = authProvider.user;
+
+    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async {
+      AuthProvider authProvider =
+          Provider.of<AuthProvider>(context, listen: false);
+      UserModels user = authProvider.user;
+
+      if (user.test_psikologi == '1') {
+        GetAnswerQuestionsProvider getAnswerProvider =
+            Provider.of<GetAnswerQuestionsProvider>(context, listen: false);
+
+        if (await getAnswerProvider.updateDataGetAnswer(
+          user_id: user.id.toString(),
+        )) {
+          print("Get Data Answer PWB - Success");
+
+          GetAnswerQuestionModels answerPWB =
+              getAnswerProvider.getAnswerQuestion;
+
+          print("Hellow mendapatkan data nich : ${answerPWB.point_answer}");
+
+          if (answerPWB.point_answer! >= 1 && answerPWB.point_answer! <= 100) {
+            typePsikologi = "Gawat Nih";
+            typePsikologiLevel = 1;
+          } else if (answerPWB.point_answer! >= 101 &&
+              answerPWB.point_answer! <= 200) {
+            typePsikologi = "Perlu Hati-Hati";
+            typePsikologiLevel = 2;
+          } else {
+            typePsikologi = "Kamu Aman";
+            typePsikologiLevel = 3;
+          }
+
+          setState(() {});
+        }
+      }
+    });
+
+    // void getDataAnswerPWB() async {
+
+    // }
 
     Widget selamatDatangUser() {
       return Container(
@@ -75,7 +137,7 @@ class HomePage extends StatelessWidget {
         decoration: BoxDecoration(
           color: backgroundColor1,
           borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: dangerColor),
+          // border: Border.all(color: dangerColor),
         ),
         child: Row(
           children: [
@@ -117,14 +179,18 @@ class HomePage extends StatelessWidget {
                             width: 30,
                             height: 30,
                             decoration: BoxDecoration(
-                              color: dangerColor,
+                              color: (typePsikologiLevel == 1)
+                                  ? dangerColor
+                                  : (typePsikologiLevel == 2)
+                                      ? warningColor
+                                      : successColor,
                               borderRadius: BorderRadius.circular(100),
                             ),
                           ),
                           Container(
                             margin: EdgeInsets.only(top: 7),
                             child: Text(
-                              "Gawat Nih",
+                              typePsikologi,
                               style: primaryTextStyle.copyWith(
                                 fontSize: 20,
                                 fontWeight: bold,
@@ -214,6 +280,60 @@ class HomePage extends StatelessWidget {
       );
     }
 
+    Widget ajakTest() {
+      return Container(
+        margin: EdgeInsets.only(
+          bottom: 20,
+          top: 15,
+        ),
+        padding: EdgeInsets.all(15),
+        decoration: BoxDecoration(
+          color: backgroundColor1,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              child: Text(
+                'Yuk Mulai Periksa Psikologis kamu. - ${user.test_psikologi}',
+                style: primaryTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: bold,
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.pushReplacementNamed(context, '/start-pwb');
+              },
+              child: Container(
+                width: double.infinity,
+                margin: EdgeInsets.only(top: 15),
+                padding: EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 20,
+                ),
+                child: Center(
+                  child: Text(
+                    'Tes Sekarang',
+                    style: thiridTextStyle.copyWith(
+                      fontSize: 12,
+                      fontWeight: semibold,
+                    ),
+                  ),
+                ),
+                decoration: BoxDecoration(
+                  color: primaryColor,
+                  borderRadius: BorderRadius.circular(7),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -234,7 +354,7 @@ class HomePage extends StatelessWidget {
         child: ListView(
           children: [
             selamatDatangUser(),
-            statusPsikologi(),
+            (user.test_psikologi == '1') ? statusPsikologi() : ajakTest(),
             rekomendArtikel(),
           ],
         ),
