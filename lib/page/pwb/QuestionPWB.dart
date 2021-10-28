@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:delit_app/Models/answer_question.dart';
 import 'package:delit_app/Models/questions_models.dart';
 import 'package:delit_app/Models/user_models.dart';
+import 'package:delit_app/component/loading_bottom.dart';
 import 'package:delit_app/component/logo.dart';
 import 'package:delit_app/page/login_page.dart';
 import 'package:delit_app/page/problemDiri.dart';
 import 'package:delit_app/page/pwb/resultPWB.dart';
-import 'package:delit_app/page/pwb/startScreenPWB.dart';
+import 'package:delit_app/providers/startScreenPWB.dart';
 import 'package:delit_app/providers/answer_provider.dart';
 import 'package:delit_app/providers/auth_provider.dart';
 import 'package:delit_app/providers/get_answer_question_Provider.dart';
@@ -25,7 +26,8 @@ class QuestionPWB extends StatefulWidget {
 
 class _QuestionPWBState extends State<QuestionPWB> {
   List startValue = [];
-  double minValue = -10.0;
+  List typeAnswer = [];
+  double minValue = 0.0;
   double maxValue = 10.0;
   bool isLoading = false;
   double resultPoint = 0;
@@ -48,7 +50,12 @@ class _QuestionPWBState extends State<QuestionPWB> {
     AuthProvider authProvider = Provider.of<AuthProvider>(context);
     UserModels user = authProvider.user;
 
-    print("panjang data : ${questionsProvider.questionPWB.length}");
+    // final String data = jsonDecode(question[1].typeAnswer.toString());
+    // print("data Answer - ID Type Answet : ${question[1].}");
+
+    // for (var i = 0; i < questionsProvider.questionPWB.length; i++) {
+    //   print("data Answer : ${question[i].typeAnswer}");
+    // }
 
     if (startValue.isEmpty) {
       for (var i = 0; i < questionsProvider.questionPWB.length; i++) {
@@ -64,13 +71,22 @@ class _QuestionPWBState extends State<QuestionPWB> {
       });
 
       print(
-          "Data Answer : ${startValue}, Hasil : ${resultPoint} , User_id : ${user.id}, Type Question : ${question[0].jenisPertanyaan!.id}");
+          "Data Answer : ${startValue}, Hasil : ${resultPoint} , User_id : ${user.id}, Type Question : ${question[0].jenisPertanyaan!.id}, Type Answer : ${question[0].typeAnswer!.id}");
+
+      for (var i = 0; i < questionsProvider.questionPWB.length; i++) {
+        typeAnswer.contains(question[i].typeAnswer!.id)
+            ? null
+            : typeAnswer.add(question[i].typeAnswer!.id);
+      }
+
+      print("Type Answer List ${typeAnswer}");
 
       if (await answerQuestionProvider.answer(
         answer: startValue,
         point_answer: resultPoint,
         user_id: user.id!.toInt(),
         jenisPertanyaan: question[0].jenisPertanyaan!.id!.toInt(),
+        typeAnswer: typeAnswer,
       )) {
         if (await authProvider.updateData(
           email: user.email.toString(),
@@ -78,6 +94,7 @@ class _QuestionPWBState extends State<QuestionPWB> {
           if (await getAnswerProvider.updateDataGetAnswer(
             user_id: user.id.toString(),
           )) {
+            isLoading = false;
             Navigator.pushReplacementNamed(context, '/home');
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -254,23 +271,44 @@ class _QuestionPWBState extends State<QuestionPWB> {
                           margin: EdgeInsets.all(5),
                           child: ListTile(
                             title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${index.toString()}. ${question[index].question} ? Value : ${startValue[index].toString()}",
+                                  "${(index + 1).toString()}. ${question[index].question} ? Nilai : ${startValue[index].toString()}",
                                   style: TextStyle(),
                                   textAlign: TextAlign.left,
                                 ),
-                                Slider(
-                                  value: startValue[index].toDouble(),
-                                  min: minValue,
-                                  max: maxValue,
-                                  onChanged: (values) {
-                                    setState(() {
-                                      startValue[index] = values.toInt();
-                                    });
-                                  },
-                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text(
+                                      'Ga Banget',
+                                      style: primaryTextStyle.copyWith(
+                                        fontSize: 12,
+                                        fontWeight: semibold,
+                                      ),
+                                    ),
+                                    Slider(
+                                      value: startValue[index].toDouble(),
+                                      min: minValue,
+                                      max: maxValue,
+                                      onChanged: (values) {
+                                        setState(() {
+                                          startValue[index] = values.toInt();
+                                        });
+                                      },
+                                    ),
+                                    Text(
+                                      'Gue Banget',
+                                      style: primaryTextStyle.copyWith(
+                                        fontSize: 12,
+                                        fontWeight: semibold,
+                                      ),
+                                    ),
+                                  ],
+                                )
                               ],
                             ),
                             // trailing: Icon(Icons.add),
@@ -292,30 +330,54 @@ class _QuestionPWBState extends State<QuestionPWB> {
                               right: 20,
                             ),
                             // ignore: deprecated_member_use
-                            child: RaisedButton(
-                              padding: EdgeInsets.only(
-                                top: 13,
-                                bottom: 13,
-                                left: size.height * 0.055,
-                                right: size.height * 0.055,
-                              ),
-                              onPressed: handleAnswer,
-                              child: Text(
-                                "Lihat Hasil",
-                                style: TextStyle(
-                                  fontFamily: 'DMSansMedium',
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              color: Theme.of(context).backgroundColor,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(5),
-                                side: BorderSide(
-                                    color: Theme.of(context).backgroundColor),
-                              ),
-                            ),
+                            child: (isLoading)
+                                ? RaisedButton(
+                                    padding: EdgeInsets.only(
+                                      top: 13,
+                                      bottom: 13,
+                                      left: size.height * 0.055,
+                                      right: size.height * 0.055,
+                                    ),
+                                    onPressed: (handleAnswer),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation(
+                                        backgroundColor1,
+                                      ),
+                                    ),
+                                    color: Theme.of(context).backgroundColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                      side: BorderSide(
+                                          color: Theme.of(context)
+                                              .backgroundColor),
+                                    ),
+                                  )
+                                : RaisedButton(
+                                    padding: EdgeInsets.only(
+                                      top: 13,
+                                      bottom: 13,
+                                      left: size.height * 0.055,
+                                      right: size.height * 0.055,
+                                    ),
+                                    onPressed: handleAnswer,
+                                    child: Text(
+                                      "Lihat Hasil",
+                                      style: TextStyle(
+                                        fontFamily: 'DMSansMedium',
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    color: Theme.of(context).backgroundColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(5),
+                                      side: BorderSide(
+                                          color: Theme.of(context)
+                                              .backgroundColor),
+                                    ),
+                                  ),
                           ),
                       ],
                     );

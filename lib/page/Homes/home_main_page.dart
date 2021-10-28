@@ -1,8 +1,11 @@
 import 'package:delit_app/Models/get_answer_questions_models.dart';
 import 'package:delit_app/Models/user_models.dart';
 import 'package:delit_app/component/component.dart';
+import 'package:delit_app/page/Homes/Article/listDataArtikel.dart';
+import 'package:delit_app/page/Homes/list_konsul_page.dart';
 import 'package:delit_app/providers/auth_provider.dart';
 import 'package:delit_app/providers/get_answer_question_Provider.dart';
+import 'package:delit_app/providers/type_answer_pwb_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:delit_app/theme.dart';
 import 'package:flutter/scheduler.dart';
@@ -19,25 +22,14 @@ class _HomePageState extends State<HomePage> {
   String typePsikologi = "";
   int typePsikologiLevel = 1;
   bool successGetData = false;
+  bool isLoading = false;
 
   @override
   void initState() {
     // getAnswerPWB();
-    super.initState();
-  }
+    isLoading = true;
 
-  // getAnswerPWB() {
-  //   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) => getDataAnswerPWB();
-
-  // }
-
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
-    UserModels user = authProvider.user;
-
-    SchedulerBinding.instance!.addPostFrameCallback((timeStamp) async {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
       AuthProvider authProvider =
           Provider.of<AuthProvider>(context, listen: false);
       UserModels user = authProvider.user;
@@ -45,18 +37,25 @@ class _HomePageState extends State<HomePage> {
       if (user.test_psikologi == '1') {
         GetAnswerQuestionsProvider getAnswerProvider =
             Provider.of<GetAnswerQuestionsProvider>(context, listen: false);
+        TypeAnswerPWBProvider getTypeAnswerPWBProvider =
+            Provider.of<TypeAnswerPWBProvider>(context, listen: false);
+
+        await getTypeAnswerPWBProvider.getQuestions(user_id: user.id!.toInt());
 
         if (await getAnswerProvider.updateDataGetAnswer(
           user_id: user.id.toString(),
         )) {
-          print("Get Data Answer PWB - Success");
+          print("Get Data Answer PWB and type Answer PWB - Success");
+          // setState(() {});
+
+          if (mounted) setState(() {});
 
           GetAnswerQuestionModels answerPWB =
               getAnswerProvider.getAnswerQuestion;
 
           print("Hellow mendapatkan data nich : ${answerPWB.point_answer}");
 
-          if (answerPWB.point_answer! >= 1 && answerPWB.point_answer! <= 100) {
+          if (answerPWB.point_answer! >= 0 && answerPWB.point_answer! <= 100) {
             typePsikologi = "Gawat Nih";
             typePsikologiLevel = 1;
           } else if (answerPWB.point_answer! >= 101 &&
@@ -68,14 +67,23 @@ class _HomePageState extends State<HomePage> {
             typePsikologiLevel = 3;
           }
 
-          setState(() {});
+          isLoading = false;
         }
       }
     });
 
-    // void getDataAnswerPWB() async {
+    super.initState();
+  }
 
-    // }
+  // getAnswerPWB() {
+  //   WidgetsBinding.instance!.addPostFrameCallback((timeStamp) => getDataAnswerPWB();
+  // }
+
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
+    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    UserModels user = authProvider.user;
 
     Widget selamatDatangUser() {
       return Container(
@@ -88,38 +96,41 @@ class _HomePageState extends State<HomePage> {
               margin: EdgeInsets.only(right: 15),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
+                border: Border.all(color: backgroundColor1, width: 0.8),
                 image: new DecorationImage(
                   fit: BoxFit.cover,
-                  image: AssetImage('assets/images/man-1.jpg'),
+                  image: AssetImage('assets/images/avatar.jpg'),
                 ),
               ),
             ),
-            Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Haloo, ${user.name}",
-                    style: primaryTextStyle.copyWith(
-                      fontWeight: semibold,
-                      fontSize: 23,
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.symmetric(
-                      vertical: 5,
-                    ),
-                    child: Text(
-                      (user.asal_kampus != null)
-                          ? 'Mahasiswa di Universitas Lampung'
-                          : '-',
+            Expanded(
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Haloo, ${user.name}",
                       style: primaryTextStyle.copyWith(
-                        fontSize: 11,
-                        fontWeight: regular,
+                        fontWeight: semibold,
+                        fontSize: 25,
                       ),
                     ),
-                  )
-                ],
+                    Container(
+                      margin: EdgeInsets.symmetric(
+                        vertical: 5,
+                      ),
+                      child: Text(
+                        (user.asal_kampus != null)
+                            ? 'Mahasiswa di Universitas Lampung'
+                            : '-',
+                        style: primaryTextStyle.copyWith(
+                          fontSize: 11,
+                          fontWeight: regular,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             )
           ],
@@ -150,58 +161,89 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         'Warna Keadaan Psikologi kamu Saat ini.',
                         style: primaryTextStyle.copyWith(
-                          fontSize: 14,
+                          fontSize: 16,
                           fontWeight: semibold,
                         ),
                       ),
                     ),
                     Container(
+                      margin: EdgeInsets.only(top: 6),
+                      child: (isLoading)
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation(
+                                      primaryColor,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'Loading',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: 'DMSans-Medium',
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(
+                                    top: 10,
+                                    right: 15,
+                                  ),
+                                  width: 30,
+                                  height: 30,
+                                  decoration: BoxDecoration(
+                                    color: (typePsikologiLevel == 1)
+                                        ? dangerColor
+                                        : (typePsikologiLevel == 2)
+                                            ? warningColor
+                                            : successColor,
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(top: 7),
+                                  child: Text(
+                                    typePsikologi,
+                                    style: primaryTextStyle.copyWith(
+                                      fontSize: 20,
+                                      fontWeight: bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                    ),
+                    Container(
                       margin: EdgeInsets.only(
-                        top: 7,
+                        top: 13,
                       ),
                       child: Text(
                         "Setiap warna akan memberikan tanda keadaan psikologi kamu.",
                         style: primaryTextStyle.copyWith(
-                          fontSize: 10,
+                          fontSize: 11.5,
                           fontWeight: regular,
                         ),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.only(top: 6),
-                      child: Row(
-                        children: [
-                          Container(
-                            margin: EdgeInsets.only(
-                              top: 10,
-                              right: 15,
-                            ),
-                            width: 30,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              color: (typePsikologiLevel == 1)
-                                  ? dangerColor
-                                  : (typePsikologiLevel == 2)
-                                      ? warningColor
-                                      : successColor,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 7),
-                            child: Text(
-                              typePsikologi,
-                              style: primaryTextStyle.copyWith(
-                                fontSize: 20,
-                                fontWeight: bold,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        (isLoading)
+                            ? print(false)
+                            : Navigator.pushNamed(context, '/main-result-test');
+                      },
                       child: Container(
                         width: double.infinity,
                         margin: EdgeInsets.only(top: 15),
@@ -209,15 +251,41 @@ class _HomePageState extends State<HomePage> {
                           vertical: 10,
                           horizontal: 20,
                         ),
-                        child: Center(
-                          child: Text(
-                            'Periksa Sekarang',
-                            style: thiridTextStyle.copyWith(
-                              fontSize: 12,
-                              fontWeight: semibold,
-                            ),
-                          ),
-                        ),
+                        child: (isLoading)
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 16,
+                                    height: 16,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation(
+                                        backgroundColor1,
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Loading',
+                                    style: thiridTextStyle.copyWith(
+                                      fontSize: 12,
+                                      fontWeight: semibold,
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Center(
+                                child: Text(
+                                  'Lihat Selangkapnya',
+                                  style: thiridTextStyle.copyWith(
+                                    fontSize: 12,
+                                    fontWeight: semibold,
+                                  ),
+                                ),
+                              ),
                         decoration: BoxDecoration(
                           color: primaryColor,
                           borderRadius: BorderRadius.circular(7),
@@ -234,6 +302,9 @@ class _HomePageState extends State<HomePage> {
     }
 
     Widget rekomendArtikel() {
+      final List artikel = dataArtikel;
+      print("Data Artikel : ${artikel[1]['title']}");
+
       return Container(
         margin: EdgeInsets.only(
           top: 20,
@@ -243,38 +314,30 @@ class _HomePageState extends State<HomePage> {
             TitleListComponent(
               title: 'Rekomendasi Artikel Untuk Kamu',
               isMore: true,
-              route: '/article',
+              route: '/education',
             ),
-            CardArticle(
-              imgProfile: 'assets/images/man-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/Pengendalian_Emosi.png',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
-            CardArticle(
-              imgProfile: 'assets/images/man-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/Meredakan_Cemas.jpg',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
-            CardArticle(
-              imgProfile: 'assets/images/man-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/Mengurangi_Stress.jpg',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
+
+            for (var i = 0; i < artikel.length; i++)
+              CardArticle(
+                imgProfile: 'assets/images/man-1.jpg',
+                nameUser: 'Nestiawan Ferdiyanto',
+                bioUser: 'Hidup Lebih Baik',
+                imgCover: artikel[i]['images'].toString(),
+                titleArticle: artikel[i]['title'].toString(),
+                dateArticle: '2 Minggu yang lalu',
+                route: '/article-view',
+                argumenID: i,
+              ),
+            // CardArticle(
+            //   imgProfile: 'assets/images/man-1.jpg',
+            //   nameUser: 'Nestiawan Ferdiyanto',
+            //   bioUser: 'Hidup Lebih Baik',
+            //   imgCover: '${dataArtikel2[2]}',
+            //   titleArticle: '${dataArtikel2[1]}',
+            //   dateArticle: '2 Minggu yang lalu',
+            //   route: '/article-view',
+            //   argumenID: 2,
+            // ),
           ],
         ),
       );
@@ -334,6 +397,133 @@ class _HomePageState extends State<HomePage> {
       );
     }
 
+    Widget historyKegiatan() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: 10,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10),
+              child: Text(
+                'Mulai Dengarkan Kembali.',
+                style: primaryTextStyle.copyWith(
+                  fontSize: 14,
+                  fontWeight: semibold,
+                ),
+              ),
+            ),
+
+            // card Aktivitas
+            SizedBox(
+              height: 160,
+              child: ListView(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                children: [
+                  Row(
+                    children: [
+                      // fiture 1
+                      HistoryPodcastHome(
+                        images: 'assets/images/Artikel/meditation.jpg',
+                        title: 'Menenangkan Diri.',
+                        author: 'Nestiawan Ferdiyanto',
+                      ),
+                      // fiture 2
+                      HistoryPodcastHome(
+                        images: 'assets/images/Artikel/Mengurangi_Stress.jpg',
+                        title: 'Pengaruh Stress',
+                        author: 'Nestiawan Ferdiyanto',
+                      ),
+                      HistoryPodcastHome(
+                        images: 'assets/images/Artikel/Pengendalian_Emosi.png',
+                        title: 'Kesal Dengan Tindakan',
+                        author: 'Nestiawan Ferdiyanto',
+                      ),
+                      // fiture 3
+                      HistoryPodcastHome(
+                        images:
+                            'assets/images/PodCast/img-profile-podcast.jpeg',
+                        title: 'Berani Untuk Berbicara',
+                        author: 'Nestiawan Ferdiyanto',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    Widget rekomendasiPsikolog() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: 15,
+          bottom: 5,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TitleListComponent(
+              title: 'Konsultasikan Masalahmu',
+              isMore: true,
+              route: '/konsultasi',
+            ),
+
+            // list Piskolog rekomen
+            SizedBox(
+              height: 160,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                shrinkWrap: true,
+                children: [
+                  CircleRekomenPsikolog(
+                    name: 'Shinta Mayasari, S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 8 tahun',
+                    images: 'assets/images/psikolog/shinta.png',
+                  ),
+                  CircleRekomenPsikolog(
+                    name: 'Moch johan pratama, m.psi, psikolog',
+                    title: 'Pengalaman 8 tahun',
+                    images: 'assets/images/psikolog/johan.jpeg',
+                  ),
+                  CircleRekomenPsikolog(
+                    name: 'Prida Harkina, S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 7 tahun',
+                    images: 'assets/images/psikolog/prida.png',
+                  ),
+                  CircleRekomenPsikolog(
+                    name: 'Vira Sandayanti ,S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 7 tahun',
+                    images: 'assets/images/psikolog/vira.png',
+                  ),
+                  CircleRekomenPsikolog(
+                    name: 'Octa Reni Setiawati, S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 8 tahun',
+                    images: 'assets/images/psikolog/octa.png',
+                  ),
+                  CircleRekomenPsikolog(
+                    name: 'Susanthi Pradini, S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 6 tahun',
+                    images: 'assets/images/psikolog/susanthi.png',
+                  ),
+                  CircleRekomenPsikolog(
+                    name: 'Tansri Adzlan Syah, S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 7 tahun',
+                    images: 'assets/images/psikolog/tansri.png',
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
@@ -351,12 +541,17 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Container(
         margin: EdgeInsets.symmetric(horizontal: defaultMargin),
-        child: ListView(
-          children: [
-            selamatDatangUser(),
-            (user.test_psikologi == '1') ? statusPsikologi() : ajakTest(),
-            rekomendArtikel(),
-          ],
+        child: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: ListView(
+            children: [
+              selamatDatangUser(),
+              (user.test_psikologi == '1') ? statusPsikologi() : ajakTest(),
+              historyKegiatan(),
+              rekomendasiPsikolog(),
+              rekomendArtikel(),
+            ],
+          ),
         ),
       ),
     );
@@ -400,7 +595,7 @@ class TitleListComponent extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Rekomendasi Artikel Untuk Kamu',
+            title.toString(),
             style: primaryTextStyle.copyWith(
               fontSize: 16,
               fontWeight: semibold,

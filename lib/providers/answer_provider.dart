@@ -20,21 +20,45 @@ class AnswerQuestionProvider with ChangeNotifier {
     required List answer,
     required int user_id,
     required int jenisPertanyaan,
+    required List typeAnswer,
   }) async {
     try {
+      List pointAnswerType = [0];
+      List answer_type = [];
+      var soalInt = 4;
       // print("Data Answer Provider: ${answer}");
 
       for (var i = 0; i < answer.length; i++) {
+        var j = 0;
         point_answer += answer[i];
+
+        if (soalInt == i) {
+          pointAnswerType.add(point_answer.toInt());
+          soalInt += 5;
+          j++;
+        }
+      }
+      // print("Jawaban Per-type : " +
+      //     (pointAnswerType[i + 1] - pointAnswerType[i]).toString());
+
+      for (var i = 0; i < typeAnswer.length; i++) {
+        answer_type.add({
+          'user_id': user_id,
+          'library_question_id': jenisPertanyaan,
+          'type_question_id': typeAnswer[i],
+          'point_answer':
+              (pointAnswerType[i + 1] - pointAnswerType[i]).toString(),
+        });
       }
 
-      print("Result Answer Point : ${point_answer}");
+      print("Result Answer Point : ${answer_type}");
 
       AnswerQuestionModels answerQuestion =
           await AnswerQuestionService().answerQuestion(
         point_answer: point_answer,
         user_id: user_id,
         jenisPertanyaan: jenisPertanyaan,
+        answer_type: answer_type,
       );
 
       _answerQuestion = answerQuestion;

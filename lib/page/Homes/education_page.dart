@@ -1,4 +1,5 @@
 import 'package:delit_app/component/component.dart';
+import 'package:delit_app/page/Homes/Article/listDataArtikel.dart';
 import 'package:flutter/material.dart';
 import 'package:delit_app/theme.dart';
 
@@ -74,7 +75,7 @@ class EducationPage extends StatelessWidget {
                         images:
                             'assets/images/cover_comic/Manhua-Like-Apotheosis.jpg',
                         title: 'Komik',
-                        route: '/komik-main',
+                        route: '/komik',
                       ),
                       // fiture 2
                       EducationCategory(
@@ -87,7 +88,7 @@ class EducationPage extends StatelessWidget {
                         images:
                             'assets/images/PodCast/img-profile-podcast.jpeg',
                         title: 'Podcast',
-                        route: '/podcast-main',
+                        route: '/podcast',
                       ),
                     ],
                   ),
@@ -122,26 +123,32 @@ class EducationPage extends StatelessWidget {
                 ListKomik(
                   image: 'assets/images/cover_comic/Cover_Komik_1.jpg',
                   title: 'Solo Leveling',
+                  route: '/detail-komik',
                 ),
                 ListKomik(
                   image: 'assets/images/cover_comic/Cover_Komik_2.jpg',
                   title: 'Log Horizon',
+                  route: '/detail-komik',
                 ),
                 ListKomik(
                   image: 'assets/images/cover_comic/Cover_Komik_3.jpg',
                   title: 'Black Clover',
+                  route: '/detail-komik',
                 ),
                 ListKomik(
                   image: 'assets/images/cover_comic/Cover_Komik_4.jpg',
                   title: 'i\'m An Evil God ',
+                  route: '/detail-komik',
                 ),
                 ListKomik(
                   image: 'assets/images/cover_comic/Cover_Komik_5.png',
                   title: 'Reon And Friends',
+                  route: '/detail-komik',
                 ),
                 ListKomik(
                   image: 'assets/images/cover_comic/Cover_Komik_7.jpg',
                   title: '339 Year In Prison ',
+                  route: '/detail-komik',
                 ),
               ],
             )
@@ -151,6 +158,9 @@ class EducationPage extends StatelessWidget {
     }
 
     Widget article() {
+      final List artikel = dataArtikel;
+      print("Data Artikel : ${artikel[1]['title']}");
+
       return Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,38 +178,19 @@ class EducationPage extends StatelessWidget {
                 ),
               ),
             ),
-            CardArticle(
-              imgProfile: 'assets/images/girl-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/Pengendalian_Emosi.png',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
 
-            CardArticle(
-              imgProfile: 'assets/images/girl-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/Meredakan_Cemas.jpg',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
+            for (var i = 3; i < 6; i++)
+              CardArticle(
+                imgProfile: 'assets/images/man-1.jpg',
+                nameUser: 'Nestiawan Ferdiyanto',
+                bioUser: 'Hidup Lebih Baik',
+                imgCover: artikel[i]['images'].toString(),
+                titleArticle: artikel[i]['title'].toString(),
+                dateArticle: '2 Minggu yang lalu',
+                route: '/article-view',
+                argumenID: i,
+              ),
 
-            CardArticle(
-              imgProfile: 'assets/images/girl-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/Pengendalian_Emosi.png',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
             // article,
           ],
         ),

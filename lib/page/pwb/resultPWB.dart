@@ -1,7 +1,7 @@
 import 'package:delit_app/component/logo.dart';
 import 'package:delit_app/page/login_page.dart';
 import 'package:delit_app/page/problemDiri.dart';
-import 'package:delit_app/page/pwb/startScreenPWB.dart';
+import 'package:delit_app/providers/startScreenPWB.dart';
 import 'package:flutter/material.dart';
 
 class ResultPWB extends StatefulWidget {

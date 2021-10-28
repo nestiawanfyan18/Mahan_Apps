@@ -38,14 +38,17 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
-    AuthProvider authProvider = Provider.of<AuthProvider>(context);
+    AuthProvider authProvider =
+        Provider.of<AuthProvider>(context, listen: false);
     GetAnswerQuestionsProvider getAnswerProvider =
-        Provider.of<GetAnswerQuestionsProvider>(context);
+        Provider.of<GetAnswerQuestionsProvider>(context, listen: false);
 
     handleSignUp() async {
       setState(() {
         isLoading = true;
       });
+
+      print("login berhasil - 1");
 
       if (await authProvider.signIn(
         email: emailController.text,
@@ -189,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   TitleContent(
                       textTitle: "Login",
-                      textContent: "Mulai Berfikir dengan damai"),
+                      textContent: "Untuk mental yang lebih handal"),
 
                   // this form input (email, password, and button)
                   Container(
@@ -221,7 +224,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             "Daftar",
                             style: TextStyle(
-                              color: Theme.of(context).backgroundColor,
+                              color: primaryColor,
                             ),
                           ),
                           onTap: () {

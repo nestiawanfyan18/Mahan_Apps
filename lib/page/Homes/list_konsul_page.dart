@@ -1,3 +1,4 @@
+import 'package:delit_app/component/component.dart';
 import 'package:delit_app/page/Homes/home_main_page.dart';
 import 'package:delit_app/theme.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class ListKonsulPage extends StatelessWidget {
     Widget headerListKonsul() {
       return Container(
         margin: EdgeInsets.only(
-          top: 25,
+          top: 15,
           bottom: 20,
         ),
         child: Column(
@@ -18,7 +19,7 @@ class ListKonsulPage extends StatelessWidget {
           children: [
             Container(
               margin: EdgeInsets.only(
-                top: 10,
+                top: 5,
                 bottom: 10,
               ),
               child: Text(
@@ -44,13 +45,17 @@ class ListKonsulPage extends StatelessWidget {
 
     Widget rekomendasiPsikolog() {
       return Container(
-        margin: EdgeInsets.symmetric(
-          vertical: 15,
+        margin: EdgeInsets.only(
+          top: 15,
+          bottom: 2,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+              margin: EdgeInsets.only(
+                bottom: 5,
+              ),
               child: Text(
                 'Rekomendasi Untuk kamu',
                 style: primaryTextStyle.copyWith(
@@ -68,36 +73,39 @@ class ListKonsulPage extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   CircleRekomenPsikolog(
-                    name: 'Tasya Andisari',
-                    title: 'Kesehatan mental',
+                    name: 'Shinta Mayasari, S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 8 tahun',
+                    images: 'assets/images/psikolog/shinta.png',
                   ),
                   CircleRekomenPsikolog(
-                    name: 'Tasya Andisari',
-                    title: 'Kesehatan mental',
+                    name: 'Moch johan pratama, m.psi, psikolog',
+                    title: 'Pengalaman 8 tahun',
+                    images: 'assets/images/psikolog/johan.jpeg',
                   ),
                   CircleRekomenPsikolog(
-                    name: 'Tasya Andisari',
-                    title: 'Kesehatan mental',
+                    name: 'Prida Harkina, S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 7 tahun',
+                    images: 'assets/images/psikolog/prida.png',
                   ),
                   CircleRekomenPsikolog(
-                    name: 'Tasya Andisari',
-                    title: 'Kesehatan mental',
+                    name: 'Vira Sandayanti ,S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 7 tahun',
+                    images: 'assets/images/psikolog/vira.png',
                   ),
                   CircleRekomenPsikolog(
-                    name: 'Tasya Andisari',
-                    title: 'Kesehatan mental',
+                    name: 'Octa Reni Setiawati, S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 8 tahun',
+                    images: 'assets/images/psikolog/octa.png',
                   ),
                   CircleRekomenPsikolog(
-                    name: 'Tasya Andisari',
-                    title: 'Kesehatan mental',
+                    name: 'Susanthi Pradini, S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 6 tahun',
+                    images: 'assets/images/psikolog/susanthi.png',
                   ),
                   CircleRekomenPsikolog(
-                    name: 'Tasya Andisari',
-                    title: 'Kesehatan mental',
-                  ),
-                  CircleRekomenPsikolog(
-                    name: 'Tasya Andisari',
-                    title: 'Kesehatan mental',
+                    name: 'Tansri Adzlan Syah, S.Psi., M.Psi., Psikolog',
+                    title: 'Pengalaman 7 tahun',
+                    images: 'assets/images/psikolog/tansri.png',
                   ),
                 ],
               ),
@@ -113,86 +121,111 @@ class ListKonsulPage extends StatelessWidget {
           );
     }
 
+    Widget listPsikologKonsultasi() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: 5,
+          bottom: 15,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  child: Text(
+                    'Daftar Psikolog Untuk kamu',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 16,
+                      fontWeight: semibold,
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(
+                    top: 10,
+                  ),
+                  child: Text(
+                    'Temukan Psikolog yang dapat membantu kamu menjadi lebih baik, untuk membuat mental yang lebih handal.',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 12,
+                      fontWeight: medium,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            ListKonsultanFWidth(
+              name: 'Shinta Mayasari, S.Psi., M.Psi., Psikolog',
+              pengalaman: 8,
+              images: 'assets/images/psikolog/shinta.png',
+            ),
+            ListKonsultanFWidth(
+              name: 'Moch johan pratama, m.psi, psikolog',
+              pengalaman: 8,
+              images: 'assets/images/psikolog/johan.jpeg',
+            ),
+            ListKonsultanFWidth(
+              name: 'Prida Harkina, S.Psi., M.Psi., Psikolog',
+              pengalaman: 7,
+              images: 'assets/images/psikolog/prida.png',
+            ),
+            ListKonsultanFWidth(
+              name: 'Vira Sandayanti ,S.Psi., M.Psi., Psikolog',
+              pengalaman: 7,
+              images: 'assets/images/psikolog/vira.png',
+            ),
+            ListKonsultanFWidth(
+              name: 'Octa Reni Setiawati, S.Psi., M.Psi., Psikolog',
+              pengalaman: 8,
+              images: 'assets/images/psikolog/octa.png',
+            ),
+            SizedBox(
+              height: 8,
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        toolbarHeight: 75,
+        toolbarHeight: appBarHeight,
+        title: Text(
+          "Konsultasi",
+          style: primaryTextStyle.copyWith(
+            fontWeight: semibold,
+            fontSize: 18,
+          ),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Image.asset(
-          'assets/images/logo-mahan.png',
-          width: 85,
-        ),
+        // leading: IconButtonBackApps(route: '/home'),
         actions: [
-          SettingAppbar(),
+          EmergencyButtonAppbar(),
         ],
       ),
       body: Container(
         padding: EdgeInsets.symmetric(
           horizontal: defaultMargin,
         ),
-        child: ListView(
-          children: [
-            headerListKonsul(),
-            rekomendasiPsikolog(),
-            pakarPsikologi(),
-          ],
+        child: ScrollConfiguration(
+          behavior: MyBehavior(),
+          child: ListView(
+            children: [
+              headerListKonsul(),
+              rekomendasiPsikolog(),
+              pakarPsikologi(),
+              listPsikologKonsultasi(),
+            ],
+          ),
         ),
-      ),
-    );
-  }
-}
-
-class CircleRekomenPsikolog extends StatelessWidget {
-  const CircleRekomenPsikolog({
-    Key? key,
-    required this.name,
-    this.title,
-    this.route,
-  }) : super(key: key);
-
-  final String name;
-  final String? title;
-  final String? route;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(
-        top: 20,
-        right: 7,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: 100,
-            child: CircleAvatar(
-              radius: 50,
-              backgroundColor: backgroundColor1,
-              child: CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage('assets/images/girl-1.jpg'),
-              ),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(
-              top: 7,
-            ),
-            width: 100,
-            child: Center(
-              child: Text(
-                name.toString(),
-                style: primaryTextStyle.copyWith(
-                  fontSize: 10,
-                  fontWeight: regular,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

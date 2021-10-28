@@ -1,4 +1,5 @@
 import 'package:delit_app/component/component.dart';
+import 'package:delit_app/page/Homes/Article/listDataArtikel.dart';
 import 'package:flutter/material.dart';
 import 'package:delit_app/theme.dart';
 
@@ -58,6 +59,7 @@ class MainArticlePage extends StatelessWidget {
     }
 
     Widget newsArticle() {
+      final List artikel = dataArtikel;
       return Container(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,82 +79,17 @@ class MainArticlePage extends StatelessWidget {
             // ------
             // --- List Article ---
             // ------
-            CardArticle(
-              imgProfile: 'assets/images/man-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/Pengendalian_Emosi.png',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
-
-            CardArticle(
-              imgProfile: 'assets/images/man-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/pengembangan_diri.jpg',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
-
-            CardArticle(
-              imgProfile: 'assets/images/man-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/Mengurangi_Stress.jpg',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
-
-            CardArticle(
-              imgProfile: 'assets/images/man-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/Meredakan_Cemas.jpg',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
-
-            CardArticle(
-              imgProfile: 'assets/images/man-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/pengembangan_diri.jpg',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
-
-            CardArticle(
-              imgProfile: 'assets/images/man-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/Mengurangi_Stress.jpg',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
-
-            CardArticle(
-              imgProfile: 'assets/images/man-1.jpg',
-              nameUser: 'Nestiawan Ferdiyanto',
-              bioUser: 'Hidup Lebih Baik',
-              imgCover: 'assets/images/Artikel/Pengendalian_Emosi.png',
-              titleArticle:
-                  'Cara untuk Meredakan emosi ketika dalam kondisi yang tidak kondusif ',
-              dateArticle: '2 Minggu yang lalu',
-              route: '/article-view',
-            ),
+            for (var i = 0; i < artikel.length; i++)
+              CardArticle(
+                imgProfile: 'assets/images/man-1.jpg',
+                nameUser: 'Nestiawan Ferdiyanto',
+                bioUser: 'Hidup Lebih Baik',
+                imgCover: artikel[i]['images'].toString(),
+                titleArticle: artikel[i]['title'].toString(),
+                dateArticle: '2 Minggu yang lalu',
+                route: '/article-view',
+                argumenID: i,
+              ),
           ],
         ),
       );

@@ -277,7 +277,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   TitleContent(
                       textTitle: "Register",
-                      textContent: "Mulai Berfikir dengan damai"),
+                      textContent: "Untuk mental yang lebih handal"),
 
                   // this form input (email, password, and button)
                   Container(
@@ -312,7 +312,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: Text(
                             "Login",
                             style: TextStyle(
-                              color: Theme.of(context).backgroundColor,
+                              color: primaryColor,
                             ),
                           ),
                           onTap: () {

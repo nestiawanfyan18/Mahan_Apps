@@ -2,13 +2,8 @@ import 'package:delit_app/page/Homes/Article/listDataArtikel.dart';
 import 'package:flutter/material.dart';
 import 'package:delit_app/theme.dart';
 
-class ViewArticlePage extends StatelessWidget {
-  // final int dataIndex;
-
-  const ViewArticlePage({
-    Key? key,
-    // required this.dataIndex,
-  }) : super(key: key);
+class DetailKomikPage extends StatelessWidget {
+  const DetailKomikPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +27,8 @@ class ViewArticlePage extends StatelessWidget {
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: AssetImage(artikel[viewArtikel['indexs']]
-                                ['images']
-                            .toString()),
+                        image: AssetImage(
+                            'assets/images/cover_comic/Cover_Komik_6.jpg'),
                       ),
                     ),
                   ),
@@ -112,61 +106,48 @@ class ViewArticlePage extends StatelessWidget {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: 7,
-                                          height: 7,
-                                          child: Image.asset(
-                                              'assets/icons/Dots_Icon.png'),
+                                    // title Article View
+                                    Flexible(
+                                      child: Container(
+                                        margin: EdgeInsets.only(
+                                          top: 10,
+                                          bottom: 10,
+                                          right: 10,
                                         ),
-                                        Container(
-                                          margin: EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            'Pemahaman Diri',
-                                            style: primaryTextStyle.copyWith(
-                                              fontSize: 12,
-                                              fontWeight: semibold,
-                                            ),
+                                        child: Text(
+                                          "Pemimpin Muda Yang Sangat Hebat",
+                                          style: primaryTextStyle.copyWith(
+                                            fontSize: 22,
+                                            fontWeight: bold,
                                           ),
-                                        )
-                                      ],
+                                        ),
+                                      ),
                                     ),
                                     Container(
-                                      width: 25,
-                                      height: 25,
+                                      margin: EdgeInsets.only(
+                                        left: 5,
+                                      ),
+                                      width: 37,
+                                      height: 37,
                                       child: Image.asset(
-                                        'assets/icons/archive_active_icon.png',
+                                        'assets/icons/love_red_icon.png',
                                       ),
                                     )
                                   ],
                                 ),
 
-                                // title Article View
-                                Container(
-                                  margin: EdgeInsets.symmetric(
-                                    vertical: 10,
-                                  ),
-                                  child: Text(
-                                    artikel[viewArtikel['indexs']]['title']
-                                        .toString(),
-                                    style: primaryTextStyle.copyWith(
-                                      fontSize: 20,
-                                      fontWeight: bold,
-                                    ),
-                                  ),
-                                ),
-
-                                // fitured
-                                SizedBox(
-                                  height: 5,
-                                ),
-
                                 Row(
                                   children: [
                                     Container(
+                                      width: 17,
+                                      height: 17,
+                                      child: Image.asset(
+                                          'assets/icons/love_red_icon.png'),
+                                    ),
+                                    SizedBox(width: 10),
+                                    Container(
                                       child: Text(
-                                        'by Nesti',
+                                        '432 Suka',
                                         style: secondaryTextStyle.copyWith(
                                           fontSize: 12,
                                           fontWeight: regular,
@@ -178,24 +159,8 @@ class ViewArticlePage extends StatelessWidget {
                                       width: 7,
                                       height: 7,
                                       child: Image.asset(
-                                          'assets/icons/Dots_Icon_grey.png'),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Container(
-                                      child: Text(
-                                        '12 September 2020',
-                                        style: secondaryTextStyle.copyWith(
-                                          fontSize: 12,
-                                          fontWeight: regular,
-                                        ),
+                                        'assets/icons/Dots_Icon_grey.png',
                                       ),
-                                    ),
-                                    SizedBox(width: 10),
-                                    Container(
-                                      width: 7,
-                                      height: 7,
-                                      child: Image.asset(
-                                          'assets/icons/Dots_Icon_grey.png'),
                                     ),
                                     SizedBox(width: 10),
                                     Row(
@@ -204,7 +169,8 @@ class ViewArticlePage extends StatelessWidget {
                                           width: 20,
                                           height: 20,
                                           child: Image.asset(
-                                              'assets/icons/eye_icons.png'),
+                                              'assets/icons/eye_icons.png',
+                                              color: primaryColor),
                                         ),
                                       ],
                                     ),
@@ -221,15 +187,51 @@ class ViewArticlePage extends StatelessWidget {
 
                                 // Text Content Article
                                 SizedBox(
+                                  height: 20,
+                                ),
+                                Container(
+                                  child: Text(
+                                    "Menceritakan 5 remaja yang terjebak pada zona waktu saat dalam penjara dan memulai untuk kehidupan baru dengan zaman yang tidak mereka kenal...",
+                                    style: primaryTextStyle.copyWith(
+                                      fontSize: 12,
+                                      fontWeight: medium,
+                                    ),
+                                  ),
+                                ),
+
+                                // List Chapter
+                                SizedBox(
                                   height: 30,
                                 ),
                                 Container(
                                   child: Text(
-                                    artikel[viewArtikel['indexs']]['content']
-                                        .toString(),
+                                    "List Chapter",
                                     style: primaryTextStyle.copyWith(
-                                      fontSize: 12,
-                                      fontWeight: medium,
+                                      fontSize: 14,
+                                      fontWeight: semibold,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 13,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, '/view-chapter-komik');
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(17),
+                                    decoration: BoxDecoration(
+                                      color: backgroundColor1,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      "Chapter 1",
+                                      style: primaryTextStyle.copyWith(
+                                        fontSize: 14,
+                                        fontWeight: medium,
+                                      ),
                                     ),
                                   ),
                                 ),

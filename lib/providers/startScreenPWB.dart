@@ -54,14 +54,8 @@ class _StartScreenPWBState extends State<StartScreenPWB> {
                             ),
                             // ignore: deprecated_member_use
                             RaisedButton(
-                              onPressed: () => Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) {
-                                    return LoginPage();
-                                  },
-                                ),
-                              ),
+                              onPressed: () => Navigator.pushReplacementNamed(
+                                  context, '/home'),
                               color: Colors.red[900],
                               child: Text(
                                 "Keluar",

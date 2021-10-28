@@ -12,7 +12,7 @@ class QuestionService {
       headers: headers,
     );
 
-    print(response.body);
+    print("response-body get Question : " + response.body);
     print("Status Kode : ${response.statusCode}");
 
     if (response.statusCode == 200) {
@@ -20,6 +20,7 @@ class QuestionService {
       List<QuestionsModels> questions = [];
 
       for (var item in data) {
+        // print("item : " + item.toString());
         questions.add(QuestionsModels.fromJson(item));
       }
 

@@ -2,7 +2,7 @@
 import 'package:delit_app/component/logo.dart';
 // ignore: unused_import
 import 'package:delit_app/page/login_page.dart';
-import 'package:delit_app/page/pwb/startScreenPWB.dart';
+import 'package:delit_app/providers/startScreenPWB.dart';
 import 'package:delit_app/theme.dart';
 // ignore: unused_import
 import 'package:flutter/gestures.dart';

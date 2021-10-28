@@ -14,18 +14,21 @@ class AnswerQuestionService {
     required double point_answer,
     required int user_id,
     required int jenisPertanyaan,
+    required List answer_type,
   }) async {
     var headers = {'content-type': 'application/json'};
     var body = jsonEncode({
       'point_answer': point_answer,
       'user_id': user_id,
       'jenis_pertanyaan_id': jenisPertanyaan,
+      'answer_type': answer_type,
     });
 
     var response = await http.post(Uri.parse('$baseUrl/answer'),
         headers: headers, body: body);
 
-    print("respon body answer : ${jsonDecode(response.body)['data']}");
+    print("Response Answer : ${response.statusCode}");
+    print("respon body answer : ${jsonDecode(response.body)}");
 
     if (response.statusCode == 200) {
       var dataAnswer = jsonDecode(response.body)['data']['answer'];
